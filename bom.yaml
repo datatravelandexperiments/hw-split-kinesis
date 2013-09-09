@@ -1,0 +1,113 @@
+name: Split Kinesis-based keyboard
+
+parts:
+
+  - &C-0-1UF-SMD-1206
+    value:      0.1μF
+    package:    SMD-1206
+    source:
+      - http://www.digikey.ca/product-detail/en/CL31B104KBCNNNC/1276-1017-1-ND/3889103
+
+  - &C-1UF-SMD-1206
+    value:      1μF
+    package:    SMD-1206
+    source:
+      - http://www.digikey.ca/product-detail/en/CL31B105KOFNNNE/1276-1783-1-ND/3889869
+
+  - &IC-MCP23S17-SOIC
+    value:      MCP32S17
+    package:    IC-28-SOIC-300
+    desc:       16 bit I/O expander with SPI interface.
+    source:
+      - http://www.digikey.ca/product-detail/en/MCP23S17-E%2FSO/MCP23S17-E%2FSO-ND/894275
+
+  - &IC-ATMEGA32U2-NOOGROOVE
+    desc:       ATmega32U2 development board.
+    source:
+      - http://code.google.com/p/micropendous/wiki/Micropendous_32U2
+
+  - &J-6-RJ12-LP
+    desc:       6P6C RJ12 modular jack, low profile
+    package:    J-8-RJ12-TE5555163
+    source:
+      - http://www.digikey.ca/product-detail/en/5555163-1/A31420-ND/769564
+
+  - &J-8-2510-M
+    desc:       8-pin right angle polarized header, 0.1″ spacing
+    source:
+      - http://futurlec.com/Connectors/POLHDRR8.shtml
+      - http://www.ebay.ca/itm/230985641780
+
+  - &J-8-SHIELD-MINIDIN
+    desc:       8-pin mini-DIN female connector
+    package:    J-8-MINIDIN-KMD11
+    source:
+      - http://www.ebay.ca/itm/140431326834
+
+  - &J-13-100-ALT-F
+    desc:       13-pin 0.1″ female header, two rows offset 0.05″
+
+  - &J-13-100-ALT-M
+    desc:       13-pin 0.1″ male header, two rows offset 0.05″
+
+  - &LED-RED-5MM
+    desc:       LED, 5mm round, red
+
+  - &R-0-SMD-1206
+    value:      0Ω
+    package:    SMD-1206
+    source:
+      - http://www.digikey.ca/product-detail/en/RC3216J000CS/1276-3514-1-ND/3903617
+      - http://www.digikey.ca/product-detail/en/RC1206JR-070RL/311-0.0ERCT-ND/732131
+
+  - &R-150-025W
+    value:      150Ω
+    package:    ¼W axial
+
+  - &R-10K-SMD-1206
+    value:      10KΩ
+    package:    SMD-1206
+    source:
+      - http://www.digikey.ca/product-detail/en/RC1206JR-0710KL/311-10KERCT-ND/732156
+
+  - &SW-TACTILE-RA-MOM-NO
+    desc:       tactile switch, momentary normally open, right angle
+    package:    SW-TACTILE-RA
+    source:
+      - http://www.digikey.ca/product-detail/en/FSMRA7JH/450-1661-ND/1632547
+
+boards:
+
+  -
+    name:         lhsspi
+    description:  Left-hand SPI-controlled matrix controller.
+    parts:
+      &SPI-MATRIX-PARTS
+      - {name: C1, part: *C-0-1UF-SMD-1206}
+      - {name: J1, part: *J-8-2510-M}
+      - {name: J2, part: *J-13-100-ALT-M}
+      - {name: J3, part: *J-8-2510-M}
+      - {name: R1, part: *R-10K-SMD-1206}
+      - {name: R2, part: [null, *R-0-SMD-1206]}
+      - {name: U1, part: *IC-MCP23S17-SOIC}
+
+  -
+    name:         rhsspi
+    description:  Right-hand SPI-controlled matrix controller.
+    parts:
+      *SPI-MATRIX-PARTS
+
+  -
+    name:         nctl
+    parts:
+      - {name: D1,  part: *LED-RED-5MM}
+      - {name: D2,  part: *LED-RED-5MM}
+      - {name: JF1, part: *J-6-RJ12-LP}
+      - {name: JF2, part: *J-6-RJ12-LP}
+      - {name: JK1, part: *J-8-SHIELD-MINIDIN}
+      - {name: JK2, part: *J-8-SHIELD-MINIDIN}
+      - {name: R1,  part: *R-150-025W}
+      - {name: R2,  part: *R-150-025W}
+      - {name: SW1, part: *SW-TACTILE-RA-MOM-NO}
+      - {name: U1,  part: *IC-ATMEGA32U2-NOOGROOVE}
+
